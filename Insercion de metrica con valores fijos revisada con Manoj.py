@@ -42,4 +42,4 @@ print conexion.sendMetric("Insertar", metric_list)
 
 print metric_list
 
-raw_input()
+#raw_input()

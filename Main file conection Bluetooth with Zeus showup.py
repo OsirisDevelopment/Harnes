@@ -20,7 +20,7 @@ conexion = client.ZeusClient('7caecc05', 'api.ciscozeus.io')
 flag=True
 
 # Iniciando conexion serial
-arduinoPort = serial.Serial('COM15', 9600, timeout=1)
+arduinoPort = serial.Serial('COM8', 9600, timeout=1)
 flagCharacter = 'k'
 
 
@@ -44,19 +44,21 @@ while flag:
     getSerialValue = arduinoPort.readline()
 
     listaSenales=getSerialValue.strip().split("*")
+
+    #id*e1*E2*UV(entero)*R(ruido)*PAS(presion)*TEMP(temperatura)*ALT(altura)
     # ["id","E1 (seguro)","E2 (Colgado o no)","Gas","Ruido","Presion","Temperatura","Altura","Oxigenacion"]
 
     identificador=int(listaSenales[0])
     metid= [{ "point": {"timestamp":timestamp, "value": identificador}}]
-
+    
     seguro=int(listaSenales[1])
     metseguro= [{"point": {"timestamp":timestamp ,"value": seguro}}]
 
     colgado=int(listaSenales[2])
     metcolgado= [{"point": {"timestamp":timestamp ,"value": colgado}}]
 
-    gas=int(listaSenales[3])
-    metgas= [ {"point": {"timestamp":timestamp, "value": gas}}]
+    uv=int(listaSenales[3])
+    metuv= [ {"point": {"timestamp":timestamp, "value": uv}}]
 
     ruido=int(listaSenales[4])
     metruido= [{ "point": {"timestamp":timestamp,"value": ruido}}]
@@ -70,8 +72,8 @@ while flag:
     altimetro=float(listaSenales[7])
     metaltimetro= [ {"point": {"timestamp":timestamp, "value": altimetro}}]
 
-    oxigenacion=float(listaSenales[8])
-    metoxigenacion= [{ "point": {"timestamp":timestamp, "value": oxigenacion}}]
+    #oxigenacion=float(listaSenales[8])
+    #metoxigenacion= [{ "point": {"timestamp":timestamp, "value": oxigenacion}}]
 
     #metrica=metrica % (timestamp ,identificador ,seguro ,colgado , gas , ruido , presion , temperatura , altimetro ,oxigenacion )
     #data_string= json.dumps(eval(metrica))
@@ -86,12 +88,12 @@ while flag:
     conexion.sendMetric("Harnes2.0.identificador", metid)
     conexion.sendMetric("Harnes2.0.seguro", metseguro)
     conexion.sendMetric("Harnes2.0.colgado", metcolgado)
-    conexion.sendMetric("Harnes2.0.gas", metgas)
+    conexion.sendMetric("Harnes2.0.gas", metuv)
     conexion.sendMetric("Harnes2.0.ruido", metruido)
     conexion.sendMetric("Harnes2.0.presion", metpresion)
     conexion.sendMetric("Harnes2.0.temperatura", mettemperatura)
     conexion.sendMetric("Harnes2.0.altimetro", metaltimetro)
-    conexion.sendMetric("Harnes2.0.oxigenacion", metoxigenacion)
+    #conexion.sendMetric("Harnes2.0.oxigenacion", metoxigenacion)
 
     print listaSenales
     #print "-------------------------------------------------------------------------------"
